@@ -75,7 +75,7 @@ const Auth = () => {
   };
 
   return (
-    <div className='relative w-full h-full flex flex-1 flex-col overflow-hidden px-4 py-20 sm:px-6 lg:px-8 bg-slate-100'>
+    <div className='relative w-full h-full flex flex-1 flex-col overflow-hidden px-4 py-20 sm:px-6 lg:px-8 '>
       <div className='relative flex flex-1 flex-col items-center justify-center pb-20 '>
         <h1 className='flex self-center font-semibold text-xl mb-[70px] '>
           Login

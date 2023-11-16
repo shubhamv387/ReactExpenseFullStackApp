@@ -12,14 +12,14 @@ const NavBar = () => {
         className='flex items-center justify-between p-6 lg:px-8'
         aria-label='Global'
       >
-        <div className='flex lg:flex-1'>
-          <Link to='/' className='-m-1.5 p-1.5 relative'>
-            <span className='sr-only'>Expense Tracker App</span>
-            <img
-              className='h-8 w-auto'
-              src='https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600'
-              alt=''
-            />
+        <div className='flex lg:flex-1 '>
+          <Link
+            to='/'
+            className='-m-1.5 p-2 relative ring-2 ring-slate-900/80 hover:ring-blue-500 rounded-md py-[2px]'
+          >
+            <h1 className='font-bold uppercase text-md md:text-xl'>
+              Expense Tracker.
+            </h1>
           </Link>
         </div>
 

@@ -2,7 +2,7 @@ import NavBar from './NavBar';
 
 const Header = () => {
   return (
-    <header className='wrapper '>
+    <header className='wrapper bg-slate-100'>
       <NavBar />
     </header>
   );
