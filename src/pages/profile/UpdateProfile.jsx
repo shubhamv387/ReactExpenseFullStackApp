@@ -1,8 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import Input from '../../components/UI/Input';
-import { useContext, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import AuthContext from '../../store/auth-context';
 import axios from 'axios';
+import { getUserData } from '../../services/userServices';
 
 const UpdateProfile = () => {
   const authCtx = useContext(AuthContext);
@@ -10,6 +11,15 @@ const UpdateProfile = () => {
 
   const fullNameInputRef = useRef();
   const profileImgUrlInputRef = useRef();
+
+  useEffect(() => {
+    getUserData(authCtx.token)
+      .then(({ displayName, photoUrl }) => {
+        fullNameInputRef.current.value = displayName || '';
+        profileImgUrlInputRef.current.value = photoUrl || '';
+      })
+      .catch((err) => console.log(err.message));
+  }, []);
 
   const submitFormHandler = async (e) => {
     e.preventDefault();
@@ -45,9 +55,6 @@ const UpdateProfile = () => {
       console.log(data);
       alert('Profile updated!');
       authCtx.setIsProfileCompleted(true);
-
-      fullNameInputRef.current.value = '';
-      profileImgUrlInputRef.current.value = '';
     } catch (error) {
       const errMsg = error.response.data.error.message || error.message;
       alert(errMsg);

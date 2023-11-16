@@ -1,5 +1,6 @@
 export const navigation = [
-  { name: 'Shop', href: '/shop' },
-  { name: 'Contact', href: '/contact' },
-  { name: 'About', href: '/about' },
+  { name: 'Shop', href: '/shop', protectedRoute: false },
+  { name: 'Contact', href: '/contact', protectedRoute: false },
+  { name: 'About', href: '/about', protectedRoute: false },
+  { name: 'Profile', href: '/profile/update', protectedRoute: true },
 ];

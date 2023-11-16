@@ -50,15 +50,30 @@ const NavBar = () => {
         </div>
 
         <div className='hidden lg:flex lg:gap-x-12'>
-          {navigation.map((item) => (
-            <NavLink
-              key={item.name}
-              to={item.href}
-              className='text-md uppercase font-bold leading-6 text-gray-900'
-            >
-              {item.name}
-            </NavLink>
-          ))}
+          {navigation.map((item) => {
+            if (item.protectedRoute)
+              return (
+                authCtx.isLoggedIn && (
+                  <NavLink
+                    key={item.name}
+                    to={item.href}
+                    className='text-md uppercase font-bold leading-6 text-gray-900'
+                  >
+                    {item.name}
+                  </NavLink>
+                )
+              );
+
+            return (
+              <NavLink
+                key={item.name}
+                to={item.href}
+                className='text-md uppercase font-bold leading-6 text-gray-900'
+              >
+                {item.name}
+              </NavLink>
+            );
+          })}
         </div>
 
         <div className='hidden lg:flex lg:flex-1 lg:justify-end'>
@@ -110,15 +125,11 @@ const NavBar = () => {
           <div className='flex items-center justify-between'>
             <Link
               to='/'
-              className='-m-1.5 p-1.5'
-              onClick={() => setMobileMenuOpen(false)}
+              className='-m-1.5 p-2 relative ring-2 ring-slate-900/80 hover:ring-blue-500 rounded-md py-[2px]'
             >
-              <span className='sr-only'>Expense Tracker App</span>
-              <img
-                className='h-8 w-auto'
-                src='https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600'
-                alt=''
-              />
+              <h1 className='font-bold uppercase text-md md:text-xl'>
+                Expense Tracker.
+              </h1>
             </Link>
             <button
               type='button'
@@ -129,6 +140,7 @@ const NavBar = () => {
               <XMarkIcon className='h-6 w-6' aria-hidden='true' />
             </button>
           </div>
+
           <div className='mt-6 flow-root'>
             <div className='-my-6 divide-y divide-gray-500/10'>
               <div className='space-y-2 py-6'>
@@ -152,8 +164,35 @@ const NavBar = () => {
                   >
                     Log in <span aria-hidden='true'>&rarr;</span>
                   </NavLink>
+                ) : !authCtx.isProfileCompleted ? (
+                  <div className='px-4 py-1 rounded-xl italic bg-[#E8DBDB] w-fit'>
+                    {isProfileUpdatePage ? (
+                      <p className='mb-0 inline me-1'>
+                        Your Profile is{' '}
+                        <span className='inline-block font-bold'>64%</span>{' '}
+                        complete. A complete profile has <br /> higher chance of
+                        landing a job.
+                      </p>
+                    ) : (
+                      <p className='mb-0 inline me-1'>
+                        Your Profile is Incomplete
+                      </p>
+                    )}
+                    <Link
+                      to={'/profile/update'}
+                      className='text-blue-600 font-bold transition-all'
+                    >
+                      Complete now
+                    </Link>
+                  </div>
                 ) : (
-                  <button type='button'>Logout</button>
+                  <button
+                    className='ring-1 ring-black hover:ring-red-500 hover:bg-red-500 hover:text-white transition-all px-3 py-1 rounded-sm'
+                    type='button'
+                    onClick={logoutHandler}
+                  >
+                    Logout
+                  </button>
                 )}
               </div>
             </div>
