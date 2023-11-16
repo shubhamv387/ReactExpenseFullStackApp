@@ -77,6 +77,7 @@ const Auth = () => {
       }
 
       authCtx.login(data.idToken);
+      authCtx.setIsProfileCompleted(false);
 
       navigate('/');
 

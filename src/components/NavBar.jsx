@@ -1,11 +1,26 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Dialog } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { navigation } from '../constents/index';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import AuthContext from '../store/auth-context';
 
 const NavBar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const navigate = useNavigate();
+
+  const { pathname } = useLocation();
+
+  const isProfileUpdatePage = pathname === '/profile/update';
+
+  const authCtx = useContext(AuthContext);
+
+  const logoutHandler = () => {
+    authCtx.logout();
+    navigate('/login');
+  };
+
   return (
     <div className='container inset-x-0 top-0 z-50'>
       <nav
@@ -47,12 +62,40 @@ const NavBar = () => {
         </div>
 
         <div className='hidden lg:flex lg:flex-1 lg:justify-end'>
-          <NavLink
-            to='/login'
-            className='text-sm font-semibold leading-6 text-gray-900'
-          >
-            Log in <span aria-hidden='true'>&rarr;</span>
-          </NavLink>
+          {!authCtx.isLoggedIn ? (
+            <NavLink
+              to='/login'
+              className='text-sm font-semibold leading-6 text-gray-900'
+            >
+              Log in <span aria-hidden='true'>&rarr;</span>
+            </NavLink>
+          ) : !authCtx.isProfileCompleted ? (
+            <div className='px-4 py-1 rounded-xl italic bg-[#E8DBDB] w-fit'>
+              {isProfileUpdatePage ? (
+                <p className='mb-0 inline me-1'>
+                  Your Profile is{' '}
+                  <span className='inline-block font-bold'>64%</span> complete.
+                  A complete profile has <br /> higher chance of landing a job.
+                </p>
+              ) : (
+                <p className='mb-0 inline me-1'>Your Profile is Incomplete</p>
+              )}
+              <Link
+                to={'/profile/update'}
+                className='text-blue-600 font-bold transition-all'
+              >
+                Complete now
+              </Link>
+            </div>
+          ) : (
+            <button
+              className='ring-1 ring-black hover:ring-red-500 hover:bg-red-500 hover:text-white transition-all px-3 py-1 rounded-sm'
+              type='button'
+              onClick={logoutHandler}
+            >
+              Logout
+            </button>
+          )}
         </div>
       </nav>
 
@@ -101,13 +144,17 @@ const NavBar = () => {
                 ))}
               </div>
               <div className='py-6'>
-                <NavLink
-                  to='/login'
-                  onClick={() => setMobileMenuOpen(false)}
-                  className='-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50'
-                >
-                  Log in <span aria-hidden='true'>&rarr;</span>
-                </NavLink>
+                {!authCtx.isLoggedIn ? (
+                  <NavLink
+                    to='/login'
+                    onClick={() => setMobileMenuOpen(false)}
+                    className='-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50'
+                  >
+                    Log in <span aria-hidden='true'>&rarr;</span>
+                  </NavLink>
+                ) : (
+                  <button type='button'>Logout</button>
+                )}
               </div>
             </div>
           </div>

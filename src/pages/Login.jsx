@@ -26,13 +26,6 @@ const Auth = () => {
     if (enteredPassword.length < 6)
       return alert('password must be of 6 characters!');
 
-    const formData = {
-      email: enteredEmail,
-      password: enteredPassword,
-    };
-
-    console.log(formData);
-
     setIsLoading(true);
 
     let url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${
@@ -63,6 +56,10 @@ const Auth = () => {
       }
 
       authCtx.login(data.idToken);
+
+      if (data.displayName.length > 0) authCtx.setIsProfileCompleted(true);
+      else authCtx.setIsProfileCompleted(false);
+
       navigate('/');
 
       emailInputRef.current.value = '';
