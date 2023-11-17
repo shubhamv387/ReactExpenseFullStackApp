@@ -7,12 +7,12 @@ import {
 import AuthContext from './auth-context';
 
 const UserContext = React.createContext({
-  userDetails: {},
-  updateProfile: (formData) => {},
-  emailVerification: () => {},
+  userDetails: { emailVerified: false },
+  updateProfile: async (formData) => {},
+  emailVerification: async () => {},
 });
 
-const initialUserDetails = {};
+const initialUserDetails = { emailVerified: false };
 
 const userReducer = (state, action) => {
   if (action.type === 'GET_USER_DETAILS') {
@@ -76,10 +76,10 @@ export const UserProvider = (props) => {
 
   const emailVerificationHandler = async () => {
     try {
-      const { success, data } = await sendEmailVerificationCode(authCtx.token);
-      console.log(data);
+      const { success } = await sendEmailVerificationCode(authCtx.token);
+      // console.log(data);
       if (success) {
-        userDispatch({ type: 'EMAIL_VERIFICATION', emailVerified: true });
+        // userDispatch({ type: 'EMAIL_VERIFICATION', emailVerified: true });
         alert('Successfully sent verification link');
       }
     } catch (error) {

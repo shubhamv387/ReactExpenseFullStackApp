@@ -1,22 +1,21 @@
-import { useContext } from 'react';
-import UserContext from '../store/user-context';
+import ExpenseForm from './Expenses/ExpenseForm';
+import ExpenseList from './Expenses/ExpenseList';
+// import UserContext from '../store/user-context';
 
 const Home = () => {
-  const userCtx = useContext(UserContext);
-
   return (
-    <div className='py-20 flex flex-col items-center gap-10'>
-      <h1 className='text-3xl font-bold'>Welcome to expense tracker app!!!</h1>
+    <div className='p-6 flex flex-col container max-w-5xl items-center justify-center gap-8'>
+      <div className='flex flex-col items-center'>
+        <h2 className='text-lg font-semibold text-gray-900 mb-0'>
+          Welcome to expense tracker app!
+        </h2>
+        <p className='mt-1 text-sm leading-6 text-gray-600'>
+          Make all your expenses of your pocket size.
+        </p>
+      </div>
 
-      {userCtx.userDetails.emailVerified !== undefined &&
-        !userCtx.userDetails.emailVerified && (
-          <button
-            className='ring-2 text-white ring-slate-900 bg-slate-900 hover:bg-slate-700 hover:ring-slate-700 px-3 py-1.5 rounded-sm'
-            onClick={userCtx.emailVerification}
-          >
-            Get Email Verification Link
-          </button>
-        )}
+      <ExpenseForm />
+      <ExpenseList />
     </div>
   );
 };

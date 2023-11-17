@@ -9,7 +9,6 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import { useContext } from 'react';
 import AuthContext from './store/auth-context';
-import UpdateProfile from './pages/profile/UpdateProfile';
 import Profile from './pages/profile/Profile';
 import NotFound from './pages/NotFound';
 import ForgotPassword from './pages/ForgotPassword';
@@ -38,7 +37,7 @@ function App() {
   return (
     <Routes>
       <Route path='/' element={<RootLayout />}>
-        <Route index element={<Home />} />
+        <Route index element={<ProtectedRoute element={<Home />} />} />
         <Route path='/login' element={<LoggedInRoute element={<Login />} />} />
         <Route
           path='/forgot-password'
@@ -53,10 +52,6 @@ function App() {
         <Route path='/contact' element={<Contact />} />
         <Route path='/profile'>
           <Route index element={<ProtectedRoute element={<Profile />} />} />
-          <Route
-            path='update'
-            element={<ProtectedRoute element={<UpdateProfile />} />}
-          />
         </Route>
         <Route path='*' element={<NotFound />} />
       </Route>

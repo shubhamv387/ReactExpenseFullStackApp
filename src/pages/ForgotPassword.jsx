@@ -58,11 +58,11 @@ const PasswordReset = () => {
           className='inline-flex justify-center rounded-lg text-sm font-semibold py-2.5 px-4 bg-slate-900 text-white hover:bg-slate-700 w-full disabled:bg-slate-700'
         >
           {!isLoading ? (
-            <span>Request Email</span>
+            <span>Request email</span>
           ) : (
             <>
               <div className='h-5 w-5 mr-3 rounded-full animate-spin border-2 border-solid border-yellow-400 border-t-transparent' />
-              <span>Processing...</span>
+              <span>Sending request...</span>
             </>
           )}
         </button>
