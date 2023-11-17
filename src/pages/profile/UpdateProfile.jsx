@@ -2,24 +2,22 @@ import { useNavigate } from 'react-router-dom';
 import Input from '../../components/UI/Input';
 import { useContext, useEffect, useRef } from 'react';
 import AuthContext from '../../store/auth-context';
-import axios from 'axios';
-import { getUserData } from '../../services/userServices';
+import UserContext from '../../store/user-context';
 
 const UpdateProfile = () => {
   const authCtx = useContext(AuthContext);
+  const userCtx = useContext(UserContext);
+  // console.log(userCtx);
+
   const navigate = useNavigate();
 
   const fullNameInputRef = useRef();
   const profileImgUrlInputRef = useRef();
 
   useEffect(() => {
-    getUserData(authCtx.token)
-      .then(({ displayName, photoUrl }) => {
-        fullNameInputRef.current.value = displayName || '';
-        profileImgUrlInputRef.current.value = photoUrl || '';
-      })
-      .catch((err) => console.log(err.message));
-  }, []);
+    fullNameInputRef.current.value = userCtx.userDetails.displayName || '';
+    profileImgUrlInputRef.current.value = userCtx.userDetails.photoUrl || '';
+  }, [userCtx.userDetails]);
 
   const submitFormHandler = async (e) => {
     e.preventDefault();
@@ -44,22 +42,7 @@ const UpdateProfile = () => {
       returnSecureToken: true,
     };
 
-    try {
-      const { data } = await axios.post(
-        `https://identitytoolkit.googleapis.com/v1/accounts:update?key=${
-          import.meta.env.VITE_FIREBASE_API_KEY
-        }`,
-        formData
-      );
-
-      console.log(data);
-      alert('Profile updated!');
-      authCtx.setIsProfileCompleted(true);
-    } catch (error) {
-      const errMsg = error.response.data.error.message || error.message;
-      alert(errMsg);
-      console.log(error);
-    }
+    userCtx.updateProfile(formData);
   };
 
   return (

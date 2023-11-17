@@ -144,16 +144,32 @@ const NavBar = () => {
           <div className='mt-6 flow-root'>
             <div className='-my-6 divide-y divide-gray-500/10'>
               <div className='space-y-2 py-6'>
-                {navigation.map((item) => (
-                  <NavLink
-                    key={item.name}
-                    to={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className='-mx-3 block rounded-lg px-3 py-2 text-base uppercase font-bold leading-7 text-gray-900 hover:bg-gray-50'
-                  >
-                    {item.name}
-                  </NavLink>
-                ))}
+                {navigation.map((item) => {
+                  if (item.protectedRoute)
+                    return (
+                      authCtx.isLoggedIn && (
+                        <NavLink
+                          key={item.name}
+                          to={item.href}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className='-mx-3 block rounded-lg px-3 py-2 text-base uppercase font-bold leading-7 text-gray-900 hover:bg-gray-50'
+                        >
+                          {item.name}
+                        </NavLink>
+                      )
+                    );
+
+                  return (
+                    <NavLink
+                      key={item.name}
+                      to={item.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className='-mx-3 block rounded-lg px-3 py-2 text-base uppercase font-bold leading-7 text-gray-900 hover:bg-gray-50'
+                    >
+                      {item.name}
+                    </NavLink>
+                  );
+                })}
               </div>
               <div className='py-6'>
                 {!authCtx.isLoggedIn ? (
