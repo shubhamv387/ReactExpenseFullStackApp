@@ -12,6 +12,7 @@ import AuthContext from './store/auth-context';
 import UpdateProfile from './pages/profile/UpdateProfile';
 import Profile from './pages/profile/Profile';
 import NotFound from './pages/NotFound';
+import ForgotPassword from './pages/ForgotPassword';
 
 function App() {
   const authCtx = useContext(AuthContext);
@@ -39,6 +40,10 @@ function App() {
       <Route path='/' element={<RootLayout />}>
         <Route index element={<Home />} />
         <Route path='/login' element={<LoggedInRoute element={<Login />} />} />
+        <Route
+          path='/forgot-password'
+          element={<LoggedInRoute element={<ForgotPassword />} />}
+        />
         <Route
           path='/register'
           element={<LoggedInRoute element={<Register />} />}

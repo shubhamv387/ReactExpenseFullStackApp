@@ -127,16 +127,20 @@ const Auth = () => {
               ref: confirmPassInputRef,
             }}
           />
-          {!isLoading ? (
-            <button
-              type='submit'
-              className='inline-flex justify-center rounded-lg text-sm font-semibold py-2.5 px-4 bg-slate-900 text-white hover:bg-slate-700 w-full'
-            >
+          <button
+            disabled={isLoading}
+            type='submit'
+            className='inline-flex justify-center rounded-lg text-sm font-semibold py-2.5 px-4 bg-slate-900 text-white hover:bg-slate-700 w-full disabled:bg-slate-700'
+          >
+            {!isLoading ? (
               <span>Create a new account</span>
-            </button>
-          ) : (
-            <h5 className='text-xl font-bold p-[6px]'>Sending Request...</h5>
-          )}
+            ) : (
+              <>
+                <div className='h-5 w-5 mr-3 rounded-full animate-spin border-2 border-solid border-yellow-400 border-t-transparent' />
+                <span>Processing...</span>
+              </>
+            )}
+          </button>
         </form>
       </div>
       <div className='relative shrink-0'>
