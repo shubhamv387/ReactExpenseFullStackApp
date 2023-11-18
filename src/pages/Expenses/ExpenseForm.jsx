@@ -1,17 +1,61 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect, useRef } from 'react';
 import ExpenseContext from '../../store/expense-context';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const ExpenseForm = () => {
+const ExpenseForm = (props) => {
   const expenseCtx = useContext(ExpenseContext);
 
-  //   console.log(expenseCtx);
+  const amountInputRef = useRef();
+
   const [isLoading, setIsLoading] = useState(false);
+  const [isOpenedForm, setIsOpenedForm] = useState(false);
+
+  const { editMode } = props;
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     amount: '',
     description: '',
     category: '',
   });
+
+  useEffect(() => {
+    const some = () => {
+      if (editMode) {
+        const expense = expenseCtx.expenses.find((item) => item.id === id);
+
+        if (expense) {
+          setFormData(expense);
+          setIsOpenedForm(true);
+          setTimeout(() => amountInputRef.current?.focus(), 10);
+        }
+      } else {
+        setFormData({
+          amount: '',
+          description: '',
+          category: '',
+        });
+        setIsOpenedForm(false);
+      }
+    };
+
+    some();
+  }, [id]);
+
+  const updateFormHandler = (e) => {
+    e.preventDefault();
+
+    // console.log(id);
+    // console.log(formData);
+    setIsLoading(true);
+
+    setTimeout(() => {
+      expenseCtx.updatedExpense(id, formData);
+      setIsLoading(false);
+      navigate('/');
+    }, 800);
+  };
 
   const inputHandler = (e) => {
     setFormData((state) => ({ ...state, [e.target.name]: e.target.value }));
@@ -20,10 +64,13 @@ const ExpenseForm = () => {
   const submitFormHandler = (e) => {
     e.preventDefault();
     setIsLoading(true);
+
     setTimeout(() => {
       expenseCtx.addExpense({ id: Date.now().toString(), ...formData });
       setIsLoading(false);
-    }, 1500);
+      setIsOpenedForm(false);
+    }, 800);
+
     setFormData({
       amount: '',
       description: '',
@@ -32,11 +79,14 @@ const ExpenseForm = () => {
   };
 
   return (
-    <form onSubmit={submitFormHandler} className='w-full'>
-      <div className='space-y-12'>
-        <div className='border-b border-gray-900/10 pb-12'>
-          <div className='mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-4 '>
-            <div className='sm:col-span-1'>
+    <form
+      onSubmit={!editMode ? submitFormHandler : updateFormHandler}
+      className='w-full'
+    >
+      <div className='border-b border-gray-900/10 pb-10 md:pb-12 flex items-center justify-center'>
+        {isOpenedForm ? (
+          <div className='grid grid-cols-4 gap-x-3 gap-y-3 w-full'>
+            <div className='col-span-4 md:col-span-2 lg:col-span-1 '>
               <label
                 htmlFor='amount'
                 className='block text-sm font-semibold w-fit leading-6 text-gray-900 cursor-pointer'
@@ -45,6 +95,7 @@ const ExpenseForm = () => {
               </label>
 
               <input
+                ref={amountInputRef}
                 onChange={inputHandler}
                 value={formData.amount}
                 required
@@ -52,11 +103,11 @@ const ExpenseForm = () => {
                 id='amount'
                 type='text'
                 placeholder='expense amount here...'
-                className={`mt-2 text-slate-900 bg-white rounded-md block w-full px-3 h-10 shadow-sm sm:text-sm focus:outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-sky-500 ring-1 ring-slate-200`}
+                className={`mt-1 text-slate-900 bg-white rounded-md block w-full px-3 h-10 shadow-sm sm:text-sm focus:outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-sky-500 ring-1 ring-slate-200`}
               />
             </div>
 
-            <div className='sm:col-span-1'>
+            <div className='col-span-4 md:col-span-2 lg:col-span-1'>
               <label
                 htmlFor='description'
                 className='block text-sm font-semibold w-fit leading-6 text-gray-900 cursor-pointer'
@@ -72,11 +123,11 @@ const ExpenseForm = () => {
                 id='description'
                 type='text'
                 placeholder='expense description here...'
-                className={`mt-2 text-slate-900 bg-white rounded-md block w-full px-3 h-10 shadow-sm sm:text-sm focus:outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-sky-500 ring-1 ring-slate-200`}
+                className={`mt-1 text-slate-900 bg-white rounded-md block w-full px-3 h-10 shadow-sm sm:text-sm focus:outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-sky-500 ring-1 ring-slate-200`}
               />
             </div>
 
-            <div className='sm:col-span-1'>
+            <div className='col-span-4 md:col-span-2 lg:col-span-1'>
               <label
                 htmlFor='category'
                 className='block text-sm font-semibold w-fit leading-6 text-gray-900 cursor-pointer'
@@ -90,7 +141,7 @@ const ExpenseForm = () => {
                 required
                 name='category'
                 id='category'
-                className={`mt-2 text-slate-900 bg-white rounded-md block w-full px-3 h-10 shadow-sm sm:text-sm focus:outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-sky-500 ring-1 ring-slate-200`}
+                className={`mt-1 text-slate-900 bg-white rounded-md block w-full px-3 h-10 shadow-sm sm:text-sm focus:outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-sky-500 ring-1 ring-slate-200`}
               >
                 <option disabled value=''>
                   Select Category
@@ -101,24 +152,34 @@ const ExpenseForm = () => {
               </select>
             </div>
 
-            <div className='sm:col-span-1 flex items-end'>
+            <div className='col-span-4 flex items-end  md:col-span-2 lg:col-span-1'>
               <button
                 disabled={isLoading}
                 type='submit'
                 className='inline-flex h-fit justify-center rounded-lg text-sm font-semibold py-2.5 px-4 bg-slate-900 text-white hover:bg-slate-700 w-full disabled:bg-slate-700'
               >
                 {!isLoading ? (
-                  <span>Add Expense</span>
+                  <span>{!editMode ? 'Add Expense' : 'Update Expense'}</span>
                 ) : (
                   <>
                     <div className='h-5 w-5 mr-3 rounded-full animate-spin border-2 border-solid border-yellow-400 border-t-transparent' />
-                    <span>Adding Expense...</span>
+                    <span>
+                      {!editMode ? 'Adding Expense...' : 'Updating Expense...'}
+                    </span>
                   </>
                 )}
               </button>
             </div>
           </div>
-        </div>
+        ) : (
+          <button
+            onClick={() => setIsOpenedForm(true)}
+            type='button'
+            className='rounded-lg text-md md:text-lg font-semibold py-2.5 px-8 bg-slate-900 text-white hover:bg-slate-700 w-fit disabled:bg-slate-700'
+          >
+            <span>Add Expense</span>
+          </button>
+        )}
       </div>
     </form>
   );

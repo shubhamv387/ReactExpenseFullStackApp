@@ -38,6 +38,10 @@ function App() {
     <Routes>
       <Route path='/' element={<RootLayout />}>
         <Route index element={<ProtectedRoute element={<Home />} />} />
+        <Route
+          path='/expenses/:id'
+          element={<ProtectedRoute element={<Home />} />}
+        />
         <Route path='/login' element={<LoggedInRoute element={<Login />} />} />
         <Route
           path='/forgot-password'
