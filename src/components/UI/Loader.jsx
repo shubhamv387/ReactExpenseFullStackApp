@@ -1,18 +1,11 @@
 const Loader = (props) => {
-  const { height, width, borderColor, borderWidth } = props;
-
-  const classes = `h-${height || 5} w-${width || 5} border-${borderWidth || 2}`;
-
   return (
-    <>
+    <div className='flex items-center justify-center gap-2'>
       <div
-        className={`mr-3 rounded-full animate-spin border-solid border-t-transparent ${classes}`}
-        style={{
-          borderColor: `transparent ${borderColor} ${borderColor} ${borderColor}`,
-        }}
+        className={`h-fit w-fit rounded-full animate-spin border-solid border-t-transparent ${props.className}`}
       />
       {props.label && <span>{props.label}</span>}
-    </>
+    </div>
   );
 };
 

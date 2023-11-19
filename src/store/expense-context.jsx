@@ -1,43 +1,51 @@
-import React, { useReducer } from 'react';
+import React, { useEffect, useReducer, useContext } from 'react';
+import {
+  addExpense,
+  deleteExpense,
+  getExpenses,
+  updateExpense,
+} from '../services/expenseServices';
+
+import AuthContext from './auth-context';
+import { toast } from 'react-toastify';
+
+export const STATUS = Object.freeze({
+  IDLE: 'idle',
+  LOADING: 'loading',
+  ERROR: 'error',
+});
 
 const ExpenseContext = React.createContext({
   expenses: [],
+  status: STATUS.IDLE,
   addExpense: (expense) => {},
   deleteExpense: (id) => {},
   updatedExpense: (id, expense) => {},
 });
 
 const initialExpenseState = {
-  expenses: [
-    {
-      id: '1',
-      amount: 220,
-      description: 'The best food I have seen',
-      category: 'Fuel',
-    },
-    {
-      id: '2',
-      amount: 999.99,
-      description: 'The best food I have seen',
-      category: 'Food',
-    },
-  ],
+  expenses: [],
+  status: STATUS.IDLE,
 };
 
 const expensesReducer = (state, action) => {
+  if (action.type === 'GET_EXPENSES') {
+    const updatedExpenses = action.expenses;
+
+    return { ...state, expenses: updatedExpenses };
+  }
   if (action.type === 'ADD_EXPENSE') {
     const updatedExpenses = state.expenses.concat(action.expense);
 
-    return { expenses: updatedExpenses };
+    return { ...state, expenses: updatedExpenses };
   }
   if (action.type === 'DELETE_EXPENSE') {
     const updatedExpenses = state.expenses.filter(
       (item) => item.id !== action.id
     );
 
-    return { expenses: updatedExpenses };
+    return { ...state, expenses: updatedExpenses };
   }
-
   if (action.type === 'UPDATE_EXPENSE') {
     const expenseIndex = state.expenses.findIndex(
       (item) => item.id === action.payload.id
@@ -52,7 +60,18 @@ const expensesReducer = (state, action) => {
       updatedExpenses[expenseIndex] = updatedExpense;
     }
 
-    return { expenses: updatedExpenses };
+    return { ...state, expenses: updatedExpenses };
+  }
+
+  // Status dispatches
+  if (action.type === STATUS.LOADING) {
+    return { ...state, status: STATUS.LOADING };
+  }
+  if (action.type === STATUS.IDLE) {
+    return { ...state, status: STATUS.IDLE };
+  }
+  if (action.type === STATUS.ERROR) {
+    return { ...state, status: STATUS.ERROR };
   }
 
   return state;
@@ -64,16 +83,89 @@ export const ExpenseProvider = (props) => {
     initialExpenseState
   );
 
-  const addExpenseHandler = (expense) => {
-    dispatchExpenses({ type: 'ADD_EXPENSE', expense });
+  const authCtx = useContext(AuthContext);
+  let { isLoggedIn, userEmail } = authCtx;
+
+  const getExpensesHandler = async () => {
+    try {
+      dispatchExpenses({ type: STATUS.LOADING });
+
+      const { data } = await getExpenses();
+      let expenses = [];
+
+      if (data) {
+        for (const [key, value] of Object.entries(data)) {
+          expenses.push({ id: key, ...value });
+        }
+      }
+      dispatchExpenses({ type: 'GET_EXPENSES', expenses });
+      dispatchExpenses({ type: STATUS.IDLE });
+    } catch (error) {
+      console.log(error);
+      dispatchExpenses({ type: STATUS.ERROR });
+    }
   };
 
-  const deleteExpenseHandler = (id) => {
-    dispatchExpenses({ type: 'DELETE_EXPENSE', id });
+  useEffect(() => {
+    const tId = setTimeout(() => getExpensesHandler(), 10);
+
+    return () => clearTimeout(tId);
+  }, [isLoggedIn, userEmail]);
+
+  const addExpenseHandler = async (expense) => {
+    try {
+      dispatchExpenses({ type: STATUS.LOADING });
+
+      const {
+        data: { name: id },
+      } = await addExpense(expense);
+
+      dispatchExpenses({
+        type: 'ADD_EXPENSE',
+        expense: { id, ...expense },
+      });
+      dispatchExpenses({ type: STATUS.IDLE });
+      toast.success('Expense added successfully!');
+    } catch (error) {
+      console.log(error);
+      toast.error('Failed to add expense!');
+      dispatchExpenses({ type: STATUS.IDLE });
+    }
   };
 
-  const updatedExpenseHandler = (id, expense) => {
-    dispatchExpenses({ type: 'UPDATE_EXPENSE', payload: { id, expense } });
+  const deleteExpenseHandler = async (id) => {
+    try {
+      dispatchExpenses({ type: STATUS.LOADING });
+
+      await deleteExpense(id);
+
+      dispatchExpenses({ type: 'DELETE_EXPENSE', id });
+      dispatchExpenses({ type: STATUS.IDLE });
+      toast.success('Expense deleted successfully!');
+    } catch (error) {
+      console.log(error);
+      toast.error('Failed to delete expense!');
+      dispatchExpenses({ type: STATUS.IDLE });
+    }
+  };
+
+  const updatedExpenseHandler = async (id, expense, cb) => {
+    try {
+      dispatchExpenses({ type: STATUS.LOADING });
+      const { updatedExpense } = await updateExpense(id, expense);
+
+      dispatchExpenses({
+        type: 'UPDATE_EXPENSE',
+        payload: { id, expense: updatedExpense },
+      });
+      dispatchExpenses({ type: STATUS.IDLE });
+      toast.success('Expense updated successfully!');
+      cb();
+    } catch (error) {
+      console.log(error);
+      toast.error('Failed to update expense!');
+      dispatchExpenses({ type: STATUS.IDLE });
+    }
   };
 
   const expenseContext = {
@@ -81,6 +173,7 @@ export const ExpenseProvider = (props) => {
     addExpense: addExpenseHandler,
     deleteExpense: deleteExpenseHandler,
     updatedExpense: updatedExpenseHandler,
+    status: expensesState.status,
   };
 
   return (

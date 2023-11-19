@@ -4,10 +4,9 @@ import { HiPencilAlt, HiOutlineTrash } from 'react-icons/hi';
 import ExpenseContext from '../../store/expense-context';
 
 const ExpenseModel = ({ expense }) => {
-  //   console.log(window.innerHeight, document.body.scrollHeight);
   const expenseCtx = useContext(ExpenseContext);
 
-  const deleteExpenseHandler = (id) => {
+  const deleteExpenseHandler = async (id) => {
     expenseCtx.deleteExpense(id);
   };
 

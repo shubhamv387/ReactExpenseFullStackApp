@@ -40,18 +40,22 @@ export const UserProvider = (props) => {
   const [userState, userDispatch] = useReducer(userReducer, initialUserDetails);
 
   useEffect(() => {
-    if (authCtx.token) {
-      getUserData(authCtx.token)
-        .then(({ success, userDetails }) => {
-          //   console.log(userDetails);
-          if (success)
-            userDispatch({
-              type: 'GET_USER_DETAILS',
-              userDetails: userDetails,
-            });
-        })
-        .catch((err) => console.log(err.message));
-    } else userDispatch({ type: 'LOGOUT' });
+    const tId = setTimeout(() => {
+      if (authCtx.token) {
+        getUserData(authCtx.token)
+          .then(({ success, userDetails }) => {
+            //   console.log(userDetails);
+            if (success)
+              userDispatch({
+                type: 'GET_USER_DETAILS',
+                userDetails: userDetails,
+              });
+          })
+          .catch((err) => console.log(err.message));
+      } else userDispatch({ type: 'LOGOUT' });
+    }, 500);
+
+    return () => clearTimeout(tId);
   }, [authCtx.isLoggedIn]);
 
   const updateProfileHandler = async (formData) => {

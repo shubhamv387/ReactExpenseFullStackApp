@@ -12,6 +12,8 @@ import AuthContext from './store/auth-context';
 import Profile from './pages/profile/Profile';
 import NotFound from './pages/NotFound';
 import ForgotPassword from './pages/ForgotPassword';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const authCtx = useContext(AuthContext);
@@ -35,31 +37,47 @@ function App() {
   };
 
   return (
-    <Routes>
-      <Route path='/' element={<RootLayout />}>
-        <Route index element={<ProtectedRoute element={<Home />} />} />
-        <Route
-          path='/expenses/:id'
-          element={<ProtectedRoute element={<Home />} />}
-        />
-        <Route path='/login' element={<LoggedInRoute element={<Login />} />} />
-        <Route
-          path='/forgot-password'
-          element={<LoggedInRoute element={<ForgotPassword />} />}
-        />
-        <Route
-          path='/register'
-          element={<LoggedInRoute element={<Register />} />}
-        />
-        <Route path='/shop' element={<Shop />} />
-        <Route path='/about' element={<About />} />
-        <Route path='/contact' element={<Contact />} />
-        <Route path='/profile'>
-          <Route index element={<ProtectedRoute element={<Profile />} />} />
+    <>
+      <ToastContainer
+        position='top-center'
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnHover
+        theme='dark'
+        style={{ width: '100%', maxWidth: '350px' }}
+      />
+      <Routes>
+        <Route path='/' element={<RootLayout />}>
+          <Route index element={<ProtectedRoute element={<Home />} />} />
+          <Route
+            path='/expenses/:id'
+            element={<ProtectedRoute element={<Home />} />}
+          />
+          <Route
+            path='/login'
+            element={<LoggedInRoute element={<Login />} />}
+          />
+          <Route
+            path='/forgot-password'
+            element={<LoggedInRoute element={<ForgotPassword />} />}
+          />
+          <Route
+            path='/register'
+            element={<LoggedInRoute element={<Register />} />}
+          />
+          <Route path='/shop' element={<Shop />} />
+          <Route path='/about' element={<About />} />
+          <Route path='/contact' element={<Contact />} />
+          <Route path='/profile'>
+            <Route index element={<ProtectedRoute element={<Profile />} />} />
+          </Route>
+          <Route path='*' element={<NotFound />} />
         </Route>
-        <Route path='*' element={<NotFound />} />
-      </Route>
-    </Routes>
+      </Routes>
+    </>
   );
 }
 

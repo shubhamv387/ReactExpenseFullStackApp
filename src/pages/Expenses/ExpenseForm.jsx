@@ -1,13 +1,15 @@
 import { useState, useContext, useEffect, useRef } from 'react';
-import ExpenseContext from '../../store/expense-context';
+import ExpenseContext, { STATUS } from '../../store/expense-context';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const ExpenseForm = (props) => {
   const expenseCtx = useContext(ExpenseContext);
+  const { status } = expenseCtx;
+
+  const isLoading = status === STATUS.LOADING;
 
   const amountInputRef = useRef();
 
-  const [isLoading, setIsLoading] = useState(false);
   const [isOpenedForm, setIsOpenedForm] = useState(false);
 
   const { editMode } = props;
@@ -21,40 +23,28 @@ const ExpenseForm = (props) => {
   });
 
   useEffect(() => {
-    const some = () => {
-      if (editMode) {
-        const expense = expenseCtx.expenses.find((item) => item.id === id);
+    let tId;
+    if (editMode) {
+      const expense = expenseCtx.expenses.find((item) => item.id === id);
 
-        if (expense) {
-          setFormData(expense);
-          setIsOpenedForm(true);
-          setTimeout(() => amountInputRef.current?.focus(), 10);
-        }
-      } else {
-        setFormData({
-          amount: '',
-          description: '',
-          category: '',
-        });
-        setIsOpenedForm(false);
+      if (expense) {
+        const { amount, description, category } = expense;
+        setFormData({ amount, description, category });
+        setIsOpenedForm(true);
+        tId = setTimeout(() => amountInputRef.current?.focus(), 0);
       }
-    };
+    } else {
+      setFormData({ amount: '', description: '', category: '' });
+      setIsOpenedForm(false);
+    }
 
-    some();
-  }, [id]);
+    return () => tId && clearTimeout(tId);
+  }, [id, expenseCtx.expenses]);
 
-  const updateFormHandler = (e) => {
+  const updateFormHandler = async (e) => {
     e.preventDefault();
 
-    // console.log(id);
-    // console.log(formData);
-    setIsLoading(true);
-
-    setTimeout(() => {
-      expenseCtx.updatedExpense(id, formData);
-      setIsLoading(false);
-      navigate('/');
-    }, 800);
+    expenseCtx.updatedExpense(id, formData, () => navigate('/'));
   };
 
   const inputHandler = (e) => {
@@ -63,13 +53,7 @@ const ExpenseForm = (props) => {
 
   const submitFormHandler = (e) => {
     e.preventDefault();
-    setIsLoading(true);
-
-    setTimeout(() => {
-      expenseCtx.addExpense({ id: Date.now().toString(), ...formData });
-      setIsLoading(false);
-      setIsOpenedForm(false);
-    }, 800);
+    expenseCtx.addExpense({ ...formData });
 
     setFormData({
       amount: '',

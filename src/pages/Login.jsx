@@ -55,7 +55,7 @@ const Auth = () => {
         throw new Error(errorMessage);
       }
 
-      authCtx.login(data.idToken);
+      authCtx.login(data.idToken, data.email);
 
       if (data.displayName.length > 0) authCtx.setIsProfileCompleted(true);
       else authCtx.setIsProfileCompleted(false);
