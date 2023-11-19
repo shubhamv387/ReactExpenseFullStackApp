@@ -41,12 +41,6 @@ const ExpenseForm = (props) => {
     return () => tId && clearTimeout(tId);
   }, [id, expenseCtx.expenses]);
 
-  const updateFormHandler = async (e) => {
-    e.preventDefault();
-
-    expenseCtx.updatedExpense(id, formData, () => navigate('/'));
-  };
-
   const inputHandler = (e) => {
     setFormData((state) => ({ ...state, [e.target.name]: e.target.value }));
   };
@@ -60,6 +54,12 @@ const ExpenseForm = (props) => {
       description: '',
       category: '',
     });
+  };
+
+  const updateFormHandler = async (e) => {
+    e.preventDefault();
+
+    expenseCtx.updatedExpense(id, formData, () => navigate('/'));
   };
 
   return (

@@ -1,7 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import ExpenseForm from './Expenses/ExpenseForm';
 import ExpenseList from './Expenses/ExpenseList';
-// import UserContext from '../store/user-context';
 
 const Home = () => {
   const location = useLocation();

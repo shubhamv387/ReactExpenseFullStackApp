@@ -30,6 +30,9 @@ const ExpenseList = () => {
   return (
     <div className='flex flex-col items-center w-full gap-3 mt-2 md:mt-4'>
       {content}
+      <h1 className='mt-1 flex self-end text-2xl font-bold py-2 px-4 text-white bg-[#2f4883] rounded-md shadow-md'>
+        Total Expense : &#8377; {expenseCtx.totalExpenseAmount.toFixed(2)}
+      </h1>
     </div>
   );
 };
