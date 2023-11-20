@@ -118,7 +118,7 @@ export const ExpenseProvider = (props) => {
     try {
       dispatchExpenses({ type: STATUS.LOADING });
 
-      const { data } = await getExpenses();
+      const { data } = await getExpenses(userEmail);
       let expenses = [];
 
       if (data) {
@@ -146,7 +146,7 @@ export const ExpenseProvider = (props) => {
 
       const {
         data: { name: id },
-      } = await addExpense(expense);
+      } = await addExpense(expense, userEmail);
 
       dispatchExpenses({
         type: 'ADD_EXPENSE',
@@ -165,7 +165,7 @@ export const ExpenseProvider = (props) => {
     try {
       dispatchExpenses({ type: STATUS.LOADING });
 
-      await deleteExpense(id);
+      await deleteExpense(id, userEmail);
 
       dispatchExpenses({ type: 'DELETE_EXPENSE', id });
       dispatchExpenses({ type: STATUS.IDLE });
@@ -180,7 +180,7 @@ export const ExpenseProvider = (props) => {
   const updatedExpenseHandler = async (id, expense, cb) => {
     try {
       dispatchExpenses({ type: STATUS.LOADING });
-      const { data } = await updateExpense(id, expense);
+      const { data } = await updateExpense(id, expense, userEmail);
 
       dispatchExpenses({
         type: 'UPDATE_EXPENSE',
