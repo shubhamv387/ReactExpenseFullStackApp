@@ -1,14 +1,13 @@
 import { useNavigate } from 'react-router-dom';
-import Input from '../../components/UI/Input';
+import Input from '../components/UI/Input';
 import { useContext, useEffect, useRef, useState } from 'react';
-import AuthContext from '../../store/auth-context';
-import UserContext from '../../store/user-context';
+import AuthContext from '../store/auth-context';
+import UserContext from '../store/user-context';
 import { toast } from 'react-toastify';
 
-const UpdateProfile = () => {
+const Profile = () => {
   const authCtx = useContext(AuthContext);
   const userCtx = useContext(UserContext);
-  // console.log(userCtx);
 
   const [isLoading, setIsLoading] = useState(false);
   const [emailVerifying, setEmailVerifying] = useState(false);
@@ -159,4 +158,4 @@ const UpdateProfile = () => {
   );
 };
 
-export default UpdateProfile;
+export default Profile;
