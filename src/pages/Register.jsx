@@ -2,6 +2,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useContext, useRef, useState } from 'react';
 import Input from '../components/UI/Input';
 import AuthContext from '../store/auth-context';
+import { signUpUser } from '../services/authServices';
+import { toast } from 'react-toastify';
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -27,65 +29,42 @@ const Auth = () => {
       enteredPassword.length < 1 ||
       enteredConfirmPass.length < 1
     ) {
-      return alert('All fields required!');
+      return toast.warn('All fields required!');
     }
     if (enteredPassword.length < 6)
-      return alert('password must be of 6 characters!');
+      return toast.warn('password must be of 6 characters!');
 
     if (enteredPassword !== enteredConfirmPass) {
       passwordInputRef.current.value = '';
       confirmPassInputRef.current.value = '';
-      return alert('password does not matches!');
+      return toast.warn('password does not matches!');
     }
-
-    const formData = {
-      email: enteredEmail,
-      password: enteredPassword,
-      confirmPass: enteredConfirmPass,
-    };
-
-    console.log(formData);
 
     setIsLoading(true);
 
-    let url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${
-      import.meta.env.VITE_FIREBASE_API_KEY
-    }`;
-
     try {
-      const res = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify({
-          email: enteredEmail,
-          password: enteredPassword,
-          returnSecureToken: true,
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const { data } = await signUpUser({
+        email: enteredEmail,
+        password: enteredPassword,
+        returnSecureToken: true,
       });
 
-      const data = await res.json();
-      // setIsLoading(false);
-
-      if (!res.ok) {
-        let errorMessage = 'Authentication Failed!';
-        if (data && data.error && data.error.message)
-          errorMessage = data.error.message;
-
-        throw new Error(errorMessage);
-      }
-
-      authCtx.login(data.idToken);
+      authCtx.login(data.idToken, data.email);
       authCtx.setIsProfileCompleted(false);
 
+      toast.success('Account created successfully!');
       navigate('/');
 
       emailInputRef.current.value = '';
       passwordInputRef.current.value = '';
       confirmPassInputRef.current.value = '';
     } catch (error) {
-      alert(error.message);
+      console.log(error);
+      const errMsg =
+        error.response?.data?.error?.message ||
+        error.message ||
+        'Registration failed!';
+      toast.error(errMsg);
     } finally {
       setIsLoading(false);
     }

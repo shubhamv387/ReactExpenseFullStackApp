@@ -2,6 +2,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useContext, useRef, useState } from 'react';
 import Input from '../components/UI/Input';
 import AuthContext from '../store/auth-context';
+import { loginUser } from '../services/authServices';
+import { toast } from 'react-toastify';
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -28,44 +30,30 @@ const Auth = () => {
 
     setIsLoading(true);
 
-    let url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${
-      import.meta.env.VITE_FIREBASE_API_KEY
-    }`;
-
     try {
-      const res = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify({
-          email: enteredEmail,
-          password: enteredPassword,
-          returnSecureToken: true,
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const { data } = await loginUser({
+        email: enteredEmail,
+        password: enteredPassword,
+        returnSecureToken: true,
       });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        let errorMessage = 'Authentication Failed!';
-        if (data && data.error && data.error.message)
-          errorMessage = data.error.message;
-
-        throw new Error(errorMessage);
-      }
 
       authCtx.login(data.idToken, data.email);
 
       if (data.displayName.length > 0) authCtx.setIsProfileCompleted(true);
       else authCtx.setIsProfileCompleted(false);
 
+      toast.success('login successful');
       navigate('/');
 
       emailInputRef.current.value = '';
       passwordInputRef.current.value = '';
     } catch (error) {
-      alert(error.message);
+      console.log(error);
+      const errMsg =
+        error.response?.data?.error?.message ||
+        error.message ||
+        'Login failed!';
+      toast.error(errMsg);
     } finally {
       setIsLoading(false);
     }

@@ -12,7 +12,7 @@ const NavBar = () => {
 
   const { pathname } = useLocation();
 
-  const isProfileUpdatePage = pathname === '/profile/update';
+  const isProfileUpdatePage = pathname === '/profile';
 
   const authCtx = useContext(AuthContext);
 
@@ -96,7 +96,7 @@ const NavBar = () => {
                 <p className='mb-0 inline me-1'>Your Profile is Incomplete</p>
               )}
               <Link
-                to={'/profile/update'}
+                to={'/profile'}
                 className='text-blue-600 font-bold transition-all'
               >
                 Complete now
@@ -195,7 +195,7 @@ const NavBar = () => {
                       </p>
                     )}
                     <Link
-                      to={'/profile/update'}
+                      to={'/profile'}
                       className='text-blue-600 font-bold transition-all'
                     >
                       Complete now

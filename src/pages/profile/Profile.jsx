@@ -3,6 +3,7 @@ import Input from '../../components/UI/Input';
 import { useContext, useEffect, useRef, useState } from 'react';
 import AuthContext from '../../store/auth-context';
 import UserContext from '../../store/user-context';
+import { toast } from 'react-toastify';
 
 const UpdateProfile = () => {
   const authCtx = useContext(AuthContext);
@@ -30,7 +31,7 @@ const UpdateProfile = () => {
     const enteredProfileImgUrl = profileImgUrlInputRef.current.value.trim();
 
     if (enteredFullName.length < 1 || enteredProfileImgUrl < 1)
-      return alert('All fields are required!');
+      return toast.warn('All fields are required!');
 
     // const imgExtension = new Set(['png', 'jpg', 'jpeg', 'webp']);
     // const photoUrlExtension = enteredProfileImgUrl.split('.');

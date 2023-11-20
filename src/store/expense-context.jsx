@@ -19,9 +19,9 @@ const ExpenseContext = React.createContext({
   expenses: [],
   totalExpenseAmount: null,
   status: STATUS.IDLE,
-  addExpense: (expense) => {},
-  deleteExpense: (id) => {},
-  updatedExpense: (id, expense) => {},
+  addExpense: async (expense) => {},
+  deleteExpense: async (id) => {},
+  updatedExpense: async (id, expense) => {},
 });
 
 const initialExpenseState = {
@@ -83,8 +83,6 @@ const expensesReducer = (state, action) => {
       totalAmount =
         totalAmount - expense.amount + +action.payload.expense.amount;
     }
-
-    console.log(totalAmount);
 
     return {
       ...state,

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 export const getUserData = async (token) => {
   try {
@@ -19,8 +20,11 @@ export const getUserData = async (token) => {
       },
     };
   } catch (error) {
-    const errMsg = error.response.data.error.message || error.message;
-    alert(errMsg);
+    const errMsg =
+      error.response?.data?.error?.message ||
+      error.message ||
+      'Failed to get user data!';
+    toast.error(errMsg);
     console.log(error);
     return { success: false, errMsg };
   }
@@ -46,8 +50,11 @@ export const updateProfile = async (formData) => {
       },
     };
   } catch (error) {
-    const errMsg = error.response.data.error.message || error.message;
-    alert(errMsg);
+    const errMsg =
+      error.response?.data?.error?.message ||
+      error.message ||
+      'Failed to update user profile!';
+    toast.error(errMsg);
     console.log(error);
     return { success: false, errMsg };
   }
@@ -64,8 +71,11 @@ export const sendEmailVerificationCode = async (token) => {
 
     return { success: true, data };
   } catch (error) {
-    const errMsg = error.response.data.error.message || error.message;
-    alert(errMsg);
+    const errMsg =
+      error.response?.data?.error?.message ||
+      error.message ||
+      'Failed to send verification email!';
+    toast.error(errMsg);
     console.log(error);
     return { success: false, errMsg };
   }
@@ -84,8 +94,11 @@ export const sendPasswordResetEmail = async (email) => {
 
     return { success: true, data };
   } catch (error) {
-    const errMsg = error.response.data.error.message || error.message;
-    alert(errMsg);
+    const errMsg =
+      error.response?.data?.error?.message ||
+      error.message ||
+      'Failed to send password reset email!';
+    toast.error(errMsg);
     console.log(error);
     return { success: false, errMsg };
   }

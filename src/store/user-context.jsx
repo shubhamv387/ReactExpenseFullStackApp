@@ -5,6 +5,7 @@ import {
   updateProfile,
 } from '../services/userServices';
 import AuthContext from './auth-context';
+import { toast } from 'react-toastify';
 
 const UserContext = React.createContext({
   userDetails: { emailVerified: false },
@@ -12,19 +13,26 @@ const UserContext = React.createContext({
   emailVerification: async () => {},
 });
 
-const initialUserDetails = { emailVerified: false };
+const initialUserDetails = { userDetails: { emailVerified: false } };
 
 const userReducer = (state, action) => {
   if (action.type === 'GET_USER_DETAILS') {
-    return { ...state, ...action.userDetails };
+    return { userDetails: { ...state.userDetails, ...action.userDetails } };
   }
 
   if (action.type === 'UPDATE_PROFILE') {
-    return { ...state, ...action.updatedUserDetails };
+    return {
+      userDetails: { ...state.userDetails, ...action.updatedUserDetails },
+    };
   }
 
   if (action.type === 'EMAIL_VERIFICATION') {
-    return { ...state, emailVerified: action.emailVerified };
+    return {
+      userDetails: {
+        ...state.userDetails,
+        emailVerified: action.emailVerified,
+      },
+    };
   }
 
   if (action.type === 'LOGOUT') {
@@ -67,7 +75,7 @@ export const UserProvider = (props) => {
       //   console.log(updatedUserDetails);
 
       if (success) {
-        alert('Profile updated!');
+        toast.success('Profile updated!');
         userDispatch({
           type: 'UPDATE_PROFILE',
           updatedUserDetails: updatedUserDetails,
@@ -84,7 +92,7 @@ export const UserProvider = (props) => {
       // console.log(data);
       if (success) {
         // userDispatch({ type: 'EMAIL_VERIFICATION', emailVerified: true });
-        alert('Successfully sent verification link');
+        toast.success('Successfully sent verification link');
       }
     } catch (error) {
       console.log(error.message);
@@ -92,10 +100,11 @@ export const UserProvider = (props) => {
   };
 
   const userContext = {
-    userDetails: userState,
+    userDetails: userState.userDetails,
     updateProfile: updateProfileHandler,
     emailVerification: emailVerificationHandler,
   };
+
   return (
     <UserContext.Provider value={userContext}>
       {props.children}
