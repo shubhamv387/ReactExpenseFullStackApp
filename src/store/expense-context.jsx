@@ -119,13 +119,14 @@ export const ExpenseProvider = (props) => {
       dispatchExpenses({ type: STATUS.LOADING });
 
       const { data } = await getExpenses(userEmail);
-      let expenses = [];
+      const expenses = [];
 
       if (data) {
         for (const [key, value] of Object.entries(data)) {
           expenses.push({ id: key, ...value });
         }
       }
+
       dispatchExpenses({ type: 'GET_EXPENSES', expenses });
       dispatchExpenses({ type: STATUS.IDLE });
     } catch (error) {

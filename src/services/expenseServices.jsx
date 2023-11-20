@@ -13,6 +13,6 @@ export const updateExpense = (id, expense, userEmail) => {
   return axios.put(`${baseUrl}/expenses/${userEmail}/${id}.json`, expense);
 };
 
-export const deleteExpense = (name, userEmail) => {
-  return axios.delete(`${baseUrl}/expenses/${userEmail}/${name}.json`);
+export const deleteExpense = (id, userEmail) => {
+  return axios.delete(`${baseUrl}/expenses/${userEmail}/${id}.json`);
 };
