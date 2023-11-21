@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { toast } from 'react-toastify';
 
 export const getUserData = (token) => {
   return axios.post(
@@ -29,26 +28,12 @@ export const sendEmailVerificationCode = (token) => {
 };
 
 export const sendPasswordResetEmail = async (email) => {
-  try {
-    const { data } = await axios.post(
-      `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${
-        import.meta.env.VITE_FIREBASE_API_KEY
-      }`,
-      { requestType: 'PASSWORD_RESET', email: email }
-    );
-
-    // console.log(data);
-
-    return { success: true, data };
-  } catch (error) {
-    const errMsg =
-      error.response?.data?.error?.message ||
-      error.message ||
-      'Failed to send password reset email!';
-    toast.error(errMsg);
-    console.log(error);
-    return { success: false, errMsg };
-  }
+  return axios.post(
+    `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${
+      import.meta.env.VITE_FIREBASE_API_KEY
+    }`,
+    { requestType: 'PASSWORD_RESET', email: email }
+  );
 };
 
 // export const verifyEmail = async (code) => {

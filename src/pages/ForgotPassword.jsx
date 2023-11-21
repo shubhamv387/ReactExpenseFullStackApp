@@ -3,6 +3,7 @@ import Input from '../components/UI/Input';
 import { sendPasswordResetEmail } from '../services/userServices';
 import { Link } from 'react-router-dom';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import { toast } from 'react-toastify';
 
 const PasswordReset = () => {
   const emailInputRef = useRef();
@@ -17,14 +18,16 @@ const PasswordReset = () => {
 
     setIsLoading(true);
     try {
-      const { success } = await sendPasswordResetEmail(enteredEmail);
+      await sendPasswordResetEmail(enteredEmail);
 
-      if (success) {
-        emailInputRef.current.value = '';
-        alert('email sent successfully!');
-      }
-      // else alert('Something went wrong!');
+      emailInputRef.current.value = '';
+      toast.success('email sent successfully!');
     } catch (error) {
+      const errMsg =
+        error.response?.data?.error?.message ||
+        error.message ||
+        'Failed to send password reset email!';
+      toast.error(errMsg);
       console.log(error);
     } finally {
       setIsLoading(false);

@@ -21,6 +21,7 @@ import Loader from './components/UI/Loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { AuthActions } from './store/authSlice.jsx';
 import { getUserDataHandler } from './store/userSlice.jsx';
+import { getAllExpensesHandler } from './store/expenseSlice.jsx';
 
 function App() {
   const authCtx = useSelector((state) => state.auth);
@@ -71,17 +72,28 @@ function App() {
     return () => clearTimeout(tId);
   }, [authCtx.token]);
 
+  useEffect(() => {
+    const tId = setTimeout(
+      () =>
+        authCtx.isLoggedIn &&
+        dispatch(getAllExpensesHandler(authCtx.userEmail)),
+      30
+    );
+
+    return () => clearTimeout(tId);
+  }, [authCtx.isLoggedIn, authCtx.userEmail]);
+
   return (
     <>
       <ToastContainer
-        position='top-center'
+        position='bottom-right'
         autoClose={3000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
         rtl={false}
         pauseOnHover
-        theme='dark'
+        theme='colored'
         className='md:w-auto md:min-w-[320px]'
       />
       <Routes>
