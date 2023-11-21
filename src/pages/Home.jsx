@@ -13,6 +13,7 @@ const Home = () => {
   editMode = query.get('editMode');
 
   const { isLoggedIn, userEmail } = useSelector((state) => state.auth);
+  const { totalExpenseAmount } = useSelector((state) => state.expense);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -34,6 +35,15 @@ const Home = () => {
         <p className='mt-1 text-sm leading-6 text-gray-600'>
           Make all your expenses of your pocket size.
         </p>
+        ,
+        {totalExpenseAmount > 10000 && (
+          <button
+            className='px-4 py-2 bg-green-700 hover:bg-green-600 text-white rounded-md'
+            type='button'
+          >
+            Activate Premium
+          </button>
+        )}
       </div>
 
       <ExpenseForm editMode={editMode === 'true' ? true : false} />
