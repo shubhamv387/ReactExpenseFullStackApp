@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { HiPencilAlt, HiOutlineTrash } from 'react-icons/hi';
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteExpenseThunk } from '../../redux/expenseSlice';
+import { deleteExpenseThunk } from '../../store/expenseSlice';
 
 const ExpenseModel = ({ expense }) => {
   const authCtx = useSelector((state) => state.auth);

@@ -5,9 +5,9 @@ import { navigation } from '../constents/index';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 // import AuthContext from '../store/auth-context';
 import { useSelector, useDispatch } from 'react-redux';
-import { AuthActions } from '../redux/authSlice';
+import { AuthActions } from '../store/authSlice';
 import { toast } from 'react-toastify';
-import { UserActions } from '../redux/userSlice';
+import { UserActions } from '../store/userSlice';
 
 const NavBar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

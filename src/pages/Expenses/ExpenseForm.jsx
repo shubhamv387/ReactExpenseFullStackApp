@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
-import { STATUS } from '../../redux/helper';
+import { STATUS } from '../../store/helper';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   addExpenseHandler,
   updateExpenseHandler,
-} from '../../redux/expenseSlice';
+} from '../../store/expenseSlice';
 
 const ExpenseForm = (props) => {
   const dispatch = useDispatch();

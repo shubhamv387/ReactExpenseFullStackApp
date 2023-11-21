@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import ExpenseForm from './Expenses/ExpenseForm';
 import ExpenseList from './Expenses/ExpenseList';
-import { getAllExpensesHandler } from '../redux/expenseSlice';
+import { getAllExpensesHandler } from '../store/expenseSlice';
 
 const Home = () => {
   const location = useLocation();

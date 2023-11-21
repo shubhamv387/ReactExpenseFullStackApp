@@ -19,8 +19,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import Loader from './components/UI/Loader';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { AuthActions } from './redux/authSlice.jsx';
-import { getUserDataHandler } from './redux/userSlice.jsx';
+import { AuthActions } from './store/authSlice.jsx';
+import { getUserDataHandler } from './store/userSlice.jsx';
 
 function App() {
   const authCtx = useSelector((state) => state.auth);

@@ -5,7 +5,7 @@ import Input from '../components/UI/Input';
 import { signUpUser } from '../services/authServices';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
-import { AuthActions } from '../redux/authSlice';
+import { AuthActions } from '../store/authSlice';
 
 const Auth = () => {
   const navigate = useNavigate();

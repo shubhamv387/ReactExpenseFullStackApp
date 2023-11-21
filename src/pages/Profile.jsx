@@ -4,10 +4,10 @@ import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { AuthActions } from '../redux/authSlice';
-import { updateProfileHandler } from '../redux/userSlice';
+import { AuthActions } from '../store/authSlice';
+import { updateProfileHandler } from '../store/userSlice';
 import { sendEmailVerificationCode } from '../services/userServices';
-import { STATUS } from '../redux/helper';
+import { STATUS } from '../store/helper';
 import { Loader } from '../components/UI/Loader';
 
 const Profile = () => {
