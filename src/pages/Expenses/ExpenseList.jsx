@@ -1,11 +1,11 @@
-import { useContext } from 'react';
-import ExpenseContext, { STATUS } from '../../store/expense-context';
+import { STATUS } from '../../redux/helper';
 import ExpenseModel from './ExpenseModel';
-import Loader from '../../components/UI/Loader';
+import { Loader } from '../../components/UI/Loader';
+import { useSelector } from 'react-redux';
 
 const ExpenseList = () => {
-  const expenseCtx = useContext(ExpenseContext);
-
+  const expenseCtx = useSelector((state) => state.expense);
+  // console.log(expense);
   const { status } = expenseCtx;
 
   let content = (

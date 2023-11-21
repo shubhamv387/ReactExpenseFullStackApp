@@ -9,10 +9,11 @@ import {
 import AuthContext from './auth-context';
 import { toast } from 'react-toastify';
 
-export const STATUS = Object.freeze({
+const STATUS = Object.freeze({
   IDLE: 'idle',
   LOADING: 'loading',
   ERROR: 'error',
+  SUCCESS: 'success',
 });
 
 const ExpenseContext = React.createContext({

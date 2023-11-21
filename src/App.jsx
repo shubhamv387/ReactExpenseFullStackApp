@@ -1,4 +1,4 @@
-import { lazy, Suspense, useContext } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 
 import './App.css';
 import { Routes, Route, Navigate } from 'react-router-dom';
@@ -14,13 +14,20 @@ const Contact = lazy(() => import('./pages/Contact.jsx'));
 const NotFound = lazy(() => import('./pages/NotFound.jsx'));
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword.jsx'));
 
-import AuthContext from './store/auth-context';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loader from './components/UI/Loader';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { AuthActions } from './redux/authSlice.jsx';
+import { getUserDataHandler } from './redux/userSlice.jsx';
+
 function App() {
-  const authCtx = useContext(AuthContext);
+  const authCtx = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
+  const timer = 30 * 60 * 1000;
+  const timeAtTokenCreated = localStorage.getItem('expiresIn');
 
   const ProtectedRoute = ({ element }) => {
     if (authCtx.isLoggedIn) {
@@ -40,6 +47,30 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    const tId = setTimeout(() => {
+      if (Object.keys(localStorage).indexOf('expiresIn') !== -1) {
+        if (Date.now() - timer > timeAtTokenCreated) {
+          dispatch(AuthActions.logout());
+          toast.error('Session expired! Login Again', {
+            position: 'top-center',
+          });
+        }
+      }
+    }, 10);
+
+    return () => clearTimeout(tId);
+  }, []);
+
+  useEffect(() => {
+    const tId = setTimeout(
+      () => authCtx.token && dispatch(getUserDataHandler(authCtx.token)),
+      20
+    );
+
+    return () => clearTimeout(tId);
+  }, [authCtx.token]);
+
   return (
     <>
       <ToastContainer
@@ -51,7 +82,7 @@ function App() {
         rtl={false}
         pauseOnHover
         theme='dark'
-        className='md:w-auto'
+        className='md:w-auto md:min-w-[320px]'
       />
       <Routes>
         <Route path='/' element={<RootLayout />}>

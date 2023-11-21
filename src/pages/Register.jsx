@@ -1,14 +1,17 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useContext, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import Input from '../components/UI/Input';
-import AuthContext from '../store/auth-context';
+// import AuthContext from '../store/auth-context';
 import { signUpUser } from '../services/authServices';
 import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { AuthActions } from '../redux/authSlice';
 
 const Auth = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const authCtx = useContext(AuthContext);
+  // const authCtx = useContext(AuthContext);
   // console.log(authCtx);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -49,8 +52,10 @@ const Auth = () => {
         returnSecureToken: true,
       });
 
-      authCtx.login(data.idToken, data.email);
-      authCtx.setIsProfileCompleted(false);
+      dispatch(
+        AuthActions.login({ token: data.idToken, userEmail: data.email })
+      );
+      dispatch(AuthActions.setIsProfileCompleted(false));
 
       toast.success('Account created successfully!');
       navigate('/');

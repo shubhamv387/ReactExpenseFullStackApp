@@ -1,12 +1,28 @@
+import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+
 import ExpenseForm from './Expenses/ExpenseForm';
 import ExpenseList from './Expenses/ExpenseList';
+import { getAllExpensesHandler } from '../redux/expenseSlice';
 
 const Home = () => {
   const location = useLocation();
   const query = new URLSearchParams(location.search);
   let editMode = false;
   editMode = query.get('editMode');
+
+  const { isLoggedIn, userEmail } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const tId = setTimeout(
+      () => isLoggedIn && dispatch(getAllExpensesHandler(userEmail)),
+      30
+    );
+
+    return () => clearTimeout(tId);
+  }, [isLoggedIn, userEmail]);
 
   // console.log(editMode);
   return (

@@ -1,12 +1,23 @@
-import { useState, useContext, useEffect, useRef } from 'react';
-import ExpenseContext, { STATUS } from '../../store/expense-context';
+import { useState, useEffect, useRef } from 'react';
+import { STATUS } from '../../redux/helper';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  addExpenseHandler,
+  updateExpenseHandler,
+} from '../../redux/expenseSlice';
 
 const ExpenseForm = (props) => {
-  const expenseCtx = useContext(ExpenseContext);
+  const dispatch = useDispatch();
+  const authCtx = useSelector((state) => state.auth);
+  const expenseCtx = useSelector((state) => state.expense);
   const { status } = expenseCtx;
 
-  const isLoading = status === STATUS.LOADING;
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(status === STATUS.LOADING);
+  }, [status]);
 
   const amountInputRef = useRef();
 
@@ -31,7 +42,7 @@ const ExpenseForm = (props) => {
         const { amount, description, category } = expense;
         setFormData({ amount, description, category });
         setIsOpenedForm(true);
-        tId = setTimeout(() => amountInputRef.current?.focus(), 0);
+        tId = setTimeout(() => amountInputRef.current?.focus(), 10);
       }
     } else {
       setFormData({ amount: '', description: '', category: '' });
@@ -47,7 +58,13 @@ const ExpenseForm = (props) => {
 
   const submitFormHandler = (e) => {
     e.preventDefault();
-    expenseCtx.addExpense({ ...formData });
+    const amountInNumber = parseInt(formData.amount);
+    dispatch(
+      addExpenseHandler(
+        { ...formData, amount: amountInNumber },
+        authCtx.userEmail
+      )
+    );
 
     setFormData({
       amount: '',
@@ -59,7 +76,16 @@ const ExpenseForm = (props) => {
   const updateFormHandler = async (e) => {
     e.preventDefault();
 
-    expenseCtx.updatedExpense(id, formData, () => navigate('/'));
+    const amountInNumber = parseInt(formData.amount);
+
+    dispatch(
+      updateExpenseHandler(
+        id,
+        { ...formData, amount: amountInNumber },
+        authCtx.userEmail,
+        () => navigate('/')
+      )
+    );
   };
 
   return (

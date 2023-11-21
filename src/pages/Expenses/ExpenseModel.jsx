@@ -1,13 +1,14 @@
 import { Link } from 'react-router-dom';
-import { useContext } from 'react';
 import { HiPencilAlt, HiOutlineTrash } from 'react-icons/hi';
-import ExpenseContext from '../../store/expense-context';
+import { useSelector, useDispatch } from 'react-redux';
+import { deleteExpenseThunk } from '../../redux/expenseSlice';
 
 const ExpenseModel = ({ expense }) => {
-  const expenseCtx = useContext(ExpenseContext);
+  const authCtx = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
-  const deleteExpenseHandler = async (id) => {
-    expenseCtx.deleteExpense(id);
+  const deleteExpenseHandler = (id) => {
+    dispatch(deleteExpenseThunk(id, authCtx.userEmail));
   };
 
   return (

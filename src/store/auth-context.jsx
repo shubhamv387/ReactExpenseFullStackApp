@@ -53,20 +53,20 @@ export const AuthProvider = (props) => {
     setToken(null);
   };
 
-  useEffect(() => {
-    const tId = setTimeout(() => {
-      if (Object.keys(localStorage).indexOf('expiresIn') !== -1) {
-        if (Date.now() - timer > timeAtTokenCreated) {
-          logoutHandler();
-          toast.error('Session expired! Login Again', {
-            position: 'top-center',
-          });
-        }
-      }
-    }, 50);
+  // useEffect(() => {
+  //   const tId = setTimeout(() => {
+  //     if (Object.keys(localStorage).indexOf('expiresIn') !== -1) {
+  //       if (Date.now() - timer > timeAtTokenCreated) {
+  //         logoutHandler();
+  //         toast.error('Session expired! Login Again', {
+  //           position: 'top-center',
+  //         });
+  //       }
+  //     }
+  //   }, 50);
 
-    return () => clearTimeout(tId);
-  }, []);
+  //   return () => clearTimeout(tId);
+  // }, []);
 
   const authContext = {
     token: token,

@@ -1,12 +1,19 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { Dialog } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { navigation } from '../constents/index';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
-import AuthContext from '../store/auth-context';
+// import AuthContext from '../store/auth-context';
+import { useSelector, useDispatch } from 'react-redux';
+import { AuthActions } from '../redux/authSlice';
+import { toast } from 'react-toastify';
+import { UserActions } from '../redux/userSlice';
 
 const NavBar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const authCtx = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -14,10 +21,12 @@ const NavBar = () => {
 
   const isProfileUpdatePage = pathname === '/profile';
 
-  const authCtx = useContext(AuthContext);
+  // const authCtx = useContext(AuthContext);
 
   const logoutHandler = () => {
-    authCtx.logout();
+    dispatch(AuthActions.logout());
+    dispatch(UserActions.resetUserData());
+    toast.success('logout successful');
     navigate('/login');
   };
 
