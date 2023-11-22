@@ -108,9 +108,9 @@ const ExpenseForm = (props) => {
         <button
           onClick={formStatusHandler}
           type='button'
-          className={`w-fit py-2 px-4 text-sm md:text-base text-white ${
+          className={`w-fit py-2 px-4 text-sm text-white transition-all ${
             !isOpenedForm
-              ? 'bg-teal-500 hover:bg-teal-600'
+              ? 'bg-teal-700 hover:bg-teal-600'
               : 'bg-rose-600 hover:bg-rose-500'
           } rounded-md`}
         >
@@ -120,14 +120,16 @@ const ExpenseForm = (props) => {
         {totalExpenseAmount > 10000 && !displayPremiumFeatures && (
           <button
             onClick={activatePremiumBtnHandler}
-            className='w-fit px-4 py-2  text-sm md:text-base bg-sky-600 hover:bg-sky-700 text-white rounded-md'
+            className='w-fit px-4 py-2 text-sm bg-sky-600 hover:bg-sky-700 text-white rounded-md'
             type='button'
           >
             Activate Premium
           </button>
         )}
 
-        {displayPremiumFeatures && <DropDown expenses={expenses} />}
+        {totalExpenseAmount > 10000 && displayPremiumFeatures && (
+          <DropDown expenses={expenses} />
+        )}
       </div>
       {isOpenedForm && (
         <form

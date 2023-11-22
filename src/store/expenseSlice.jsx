@@ -41,7 +41,7 @@ const expenseSlice = createSlice({
         let updatedExpense = { ...expense, ...action.payload.expense };
         state.expenses[expenseIndex] = updatedExpense;
 
-        state.totalExpenseAmount -=
+        state.totalExpenseAmount =
           state.totalExpenseAmount -
           expense.amount +
           +action.payload.expense.amount;
