@@ -16,7 +16,7 @@ const ForgotPassword = lazy(() => import('./pages/ForgotPassword.jsx'));
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Loader from './components/UI/Loader';
+import PageLoader from './components/UI/Loader';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { AuthActions } from './store/authSlice.jsx';
@@ -86,14 +86,14 @@ function App() {
   return (
     <>
       <ToastContainer
-        position='bottom-right'
+        position='top-right'
         autoClose={3000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
         rtl={false}
         pauseOnHover
-        theme='colored'
+        theme='dark'
         className='md:w-auto md:min-w-[320px]'
       />
       <Routes>
@@ -105,7 +105,7 @@ function App() {
                 element={
                   <Suspense
                     fallback={
-                      <Loader className='p-4 border-4 border-indigo-500' />
+                      <PageLoader className='p-4 border-4 border-indigo-500' />
                     }
                   >
                     <Home />
@@ -121,7 +121,7 @@ function App() {
                 element={
                   <Suspense
                     fallback={
-                      <Loader className='p-4 border-4 border-indigo-500' />
+                      <PageLoader className='p-4 border-4 border-indigo-500' />
                     }
                   >
                     <Home />
@@ -137,7 +137,7 @@ function App() {
                 element={
                   <Suspense
                     fallback={
-                      <Loader className='p-4 border-4 border-indigo-500' />
+                      <PageLoader className='p-4 border-4 border-indigo-500' />
                     }
                   >
                     <Login />
@@ -153,7 +153,7 @@ function App() {
                 element={
                   <Suspense
                     fallback={
-                      <Loader className='p-4 border-4 border-indigo-500' />
+                      <PageLoader className='p-4 border-4 border-indigo-500' />
                     }
                   >
                     <ForgotPassword />
@@ -169,7 +169,7 @@ function App() {
                 element={
                   <Suspense
                     fallback={
-                      <Loader className='p-4 border-4 border-indigo-500' />
+                      <PageLoader className='p-4 border-4 border-indigo-500' />
                     }
                   >
                     <Register />
@@ -182,7 +182,9 @@ function App() {
             path='/shop'
             element={
               <Suspense
-                fallback={<Loader className='p-4 border-4 border-indigo-500' />}
+                fallback={
+                  <PageLoader className='p-4 border-4 border-indigo-500' />
+                }
               >
                 <Shop />
               </Suspense>
@@ -192,7 +194,9 @@ function App() {
             path='/about'
             element={
               <Suspense
-                fallback={<Loader className='p-4 border-4 border-indigo-500' />}
+                fallback={
+                  <PageLoader className='p-4 border-4 border-indigo-500' />
+                }
               >
                 <About />
               </Suspense>
@@ -202,7 +206,9 @@ function App() {
             path='/contact'
             element={
               <Suspense
-                fallback={<Loader className='p-4 border-4 border-indigo-500' />}
+                fallback={
+                  <PageLoader className='p-4 border-4 border-indigo-500' />
+                }
               >
                 <Contact />
               </Suspense>
@@ -216,7 +222,7 @@ function App() {
                   element={
                     <Suspense
                       fallback={
-                        <Loader className='p-4 border-4 border-indigo-500' />
+                        <PageLoader className='p-4 border-4 border-indigo-500' />
                       }
                     >
                       <Profile />
@@ -230,7 +236,9 @@ function App() {
             path='*'
             element={
               <Suspense
-                fallback={<Loader className='p-4 border-4 border-indigo-500' />}
+                fallback={
+                  <PageLoader className='p-4 border-4 border-indigo-500' />
+                }
               >
                 <NotFound />
               </Suspense>
