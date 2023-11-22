@@ -14,7 +14,7 @@ const PasswordReset = () => {
     e.preventDefault();
 
     const enteredEmail = emailInputRef.current.value.trim();
-    if (enteredEmail.length < 1) return alert('Please enter valid email!');
+    if (enteredEmail.length < 1) return toast.warn('Please enter valid email!');
 
     setIsLoading(true);
     try {

@@ -26,10 +26,10 @@ const Auth = () => {
     const enteredPassword = passwordInputRef.current.value.trim();
 
     if (enteredEmail.length < 1 || enteredPassword.length < 1) {
-      return alert('All fields required!');
+      return toast.warn('All fields required!');
     }
     if (enteredPassword.length < 6)
-      return alert('password must be of 6 characters!');
+      return toast.warn('password must be of 6 characters!');
 
     setIsLoading(true);
 

@@ -19,7 +19,7 @@ const ExpenseModel = ({ expense }) => {
         </h3>
         <p className='flex-1'>{expense.description}</p>
         <h2 className='font-bold text-xl md:text-2xl mt-2 md:mt-0 w-fit'>
-          &#8377; {expense.amount}
+          &#8377; {expense.amount.toFixed(2)}
         </h2>
       </div>
 

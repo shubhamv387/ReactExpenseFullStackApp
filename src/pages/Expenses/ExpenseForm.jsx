@@ -6,7 +6,7 @@ import {
   addExpenseHandler,
   updateExpenseHandler,
 } from '../../store/expenseSlice';
-import DropDown from '../../components/UI/DropDown';
+import DropDown from './DropDown';
 import { toast } from 'react-toastify';
 
 const ExpenseForm = (props) => {
@@ -62,7 +62,13 @@ const ExpenseForm = (props) => {
 
   const submitFormHandler = (e) => {
     e.preventDefault();
-    const amountInNumber = parseInt(formData.amount);
+
+    const regexPattern = /^[0-9]+(\.[0-9]+)?$/;
+
+    if (!regexPattern.test(formData.amount))
+      return toast.warn('Amount should a number.');
+
+    const amountInNumber = parseFloat(formData.amount);
     dispatch(
       addExpenseHandler(
         { ...formData, amount: amountInNumber },
@@ -80,7 +86,12 @@ const ExpenseForm = (props) => {
   const updateFormHandler = async (e) => {
     e.preventDefault();
 
-    const amountInNumber = parseInt(formData.amount);
+    const regexPattern = /^[0-9]+(\.[0-9]+)?$/;
+
+    if (!regexPattern.test(formData.amount))
+      return toast.warn('Amount should a number.');
+
+    const amountInNumber = parseFloat(formData.amount);
 
     dispatch(
       updateExpenseHandler(
