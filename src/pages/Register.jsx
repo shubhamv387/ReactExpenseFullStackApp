@@ -15,10 +15,19 @@ const Auth = () => {
   // console.log(authCtx);
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isShownPass, setIsShownPass] = useState(false);
 
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
   const confirmPassInputRef = useRef();
+
+  const setIsShownPassHandler = () => {
+    setIsShownPass(!isShownPass);
+
+    !isShownPass
+      ? (passwordInputRef.current.type = 'text')
+      : (passwordInputRef.current.type = 'password');
+  };
 
   const submitFormHandler = async (e) => {
     e.preventDefault();
@@ -119,6 +128,8 @@ const Auth = () => {
               id: 'password',
               ref: passwordInputRef,
             }}
+            isShownPass={isShownPass}
+            setIsShownPass={setIsShownPassHandler}
           />
 
           <Input
