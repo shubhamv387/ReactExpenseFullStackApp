@@ -25,11 +25,13 @@ const Auth = () => {
     const enteredEmail = emailInputRef.current.value.trim();
     const enteredPassword = passwordInputRef.current.value.trim();
 
+    // eslint-disable-next-line no-unused-vars
+    const regexPattern =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\0-9)(?=.*[^A-Za-z0-9]).{8,}$/;
+
     if (enteredEmail.length < 1 || enteredPassword.length < 1) {
       return toast.warn('All fields required!');
     }
-    if (enteredPassword.length < 6)
-      return toast.warn('password must be of 6 characters!');
 
     setIsLoading(true);
 

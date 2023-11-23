@@ -34,12 +34,31 @@ const Auth = () => {
     ) {
       return toast.warn('All fields required!');
     }
-    if (enteredPassword.length < 6)
-      return toast.warn('password must be of 6 characters!');
+
+    if (!/(?=.*[a-z])/.test(enteredPassword)) {
+      passwordInputRef.current.focus();
+      return toast.warn('At least one lowercase character is required!');
+    }
+    if (!/(?=.*[A-Z])/.test(enteredPassword)) {
+      passwordInputRef.current.focus();
+      return toast.warn('At least one uppercase character is required!');
+    }
+    if (!/(?=.*[0-9])/.test(enteredPassword)) {
+      passwordInputRef.current.focus();
+      return toast.warn('At least one numeric character is required!');
+    }
+    if (!/(?=.*[^A-Za-z0-9])/.test(enteredPassword)) {
+      passwordInputRef.current.focus();
+      return toast.warn('At least one special character is required!');
+    }
+    if (!/.{6,}/.test(enteredPassword)) {
+      passwordInputRef.current.focus();
+      return toast.warn('Password must be at least 6 characters long!');
+    }
 
     if (enteredPassword !== enteredConfirmPass) {
-      passwordInputRef.current.value = '';
       confirmPassInputRef.current.value = '';
+      confirmPassInputRef.current.focus();
       return toast.warn('password does not matches!');
     }
 
