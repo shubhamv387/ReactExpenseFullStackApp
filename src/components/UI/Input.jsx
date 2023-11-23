@@ -1,4 +1,4 @@
-import { BsEyeFill, BsEyeSlashFill } from 'react-icons/Bs';
+import { BsEyeFill, BsEyeSlashFill } from 'react-icons/bs';
 
 const Input = ({ input, className, label, isShownPass, setIsShownPass }) => {
   return (
