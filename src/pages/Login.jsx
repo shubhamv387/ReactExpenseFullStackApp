@@ -79,8 +79,8 @@ const Auth = () => {
   };
 
   return (
-    <div className='relative w-full h-full flex flex-1 flex-col overflow-hidden px-4 py-20 sm:px-6 lg:px-8 '>
-      <div className='relative flex flex-1 flex-col items-center justify-center pb-20 '>
+    <section className='relative w-full h-full flex flex-1 flex-col overflow-hidden px-4 py-20 sm:px-6 lg:px-8 '>
+      <div className='relative flex flex-1 flex-col items-center justify-center '>
         <h1 className='flex self-center font-semibold text-xl mb-[70px] '>
           Login
         </h1>
@@ -128,8 +128,20 @@ const Auth = () => {
           </p>
         </form>
       </div>
+
+      <div className='flex flex-col m-10 gap-3 items-center justify-center'>
+        <div className='flex flex-col'>
+          <p>
+            <span className='font-bold'>Test Email:</span> testuser@test.com
+          </p>
+          <p>
+            <span className='font-bold'>Password:</span> Test##123
+          </p>
+        </div>
+      </div>
+
       <div className='relative shrink-0'>
-        <div className='text-sm text-gray-900 flex flex-col md:flex-row items-center justify-center gap-3 md:gap-5'>
+        <div className='text-sm text-gray-900 flex items-center justify-center gap-3 md:gap-5'>
           <p className='text-center inline-flex sm:text-left mb-0'>
             Don&apos;t have an account?
           </p>
@@ -144,7 +156,7 @@ const Auth = () => {
           </Link>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

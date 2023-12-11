@@ -115,7 +115,11 @@ const ExpenseForm = (props) => {
 
   return (
     <div className='w-full'>
-      <div className={`w-full flex items-center justify-between `}>
+      <div
+        className={`w-full flex items-center ${
+          expenses.length <= 0 ? 'justify-center' : 'justify-between'
+        } `}
+      >
         <button
           onClick={formStatusHandler}
           type='button'
@@ -204,7 +208,7 @@ const ExpenseForm = (props) => {
                   required
                   name='category'
                   id='category'
-                  className={`mt-1 text-slate-900 bg-white rounded-md block w-full px-3 h-10 shadow-sm sm:text-sm focus:outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-sky-500 ring-1 ring-slate-200`}
+                  className={`mt-1 cursor-pointer text-slate-900 bg-white rounded-md block w-full px-3 h-10 shadow-sm sm:text-sm focus:outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-sky-500 ring-1 ring-slate-200`}
                 >
                   <option disabled value=''>
                     Select Category

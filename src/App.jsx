@@ -13,6 +13,7 @@ const About = lazy(() => import('./pages/About.jsx'));
 const Contact = lazy(() => import('./pages/Contact.jsx'));
 const NotFound = lazy(() => import('./pages/NotFound.jsx'));
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword.jsx'));
+import Popup from './components/UI/Popup';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -85,6 +86,7 @@ function App() {
 
   return (
     <>
+      <Popup />
       <ToastContainer
         position='top-right'
         autoClose={3000}
@@ -96,6 +98,7 @@ function App() {
         theme='dark'
         className='md:w-auto md:min-w-[320px]'
       />
+
       <Routes>
         <Route path='/' element={<RootLayout />}>
           <Route

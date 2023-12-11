@@ -158,7 +158,7 @@ const Auth = () => {
         </form>
       </div>
       <div className='relative shrink-0'>
-        <div className='text-sm text-gray-900 flex flex-col md:flex-row items-center justify-center gap-3 md:gap-5'>
+        <div className='text-sm text-gray-900 flex items-center justify-center gap-3 md:gap-5'>
           <p className='text-center inline-flex sm:text-left mb-0'>
             Already have an account?
           </p>
